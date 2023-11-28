@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="
+http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.5.xsd
+http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.5.xsd">
+
+
+
+	<import resource="../../manufacture-config.xml" />
+	
+
+	<bean id="aviatMwCustomerManager" class="com.mobinets.nps.customer.transmission.manufacture.aviat.AviatMwCustomerManager" >
+<!-- 		<property name="r3VlanParser" ref="vlanR3Parser"></property> -->
+<!-- 		<property name="r3CcInfosparser" ref="r3CCInfoParser" /> -->
+<!-- 		<property name="r3InterConnsParser" ref="r3TrLinksParser" /> -->
+		<property name="aviatNetworkElementsParser" ref="aviatNetworkElementsParser" />
+		<property name="aviatmwNodeSlotsParser" ref="aviatmwNodeSlotsParser"/>
+		<property name="aviatTransmissionLinkParser" ref="aviatTransmissionLinkParser" />
+<!-- 		<property name="aviatMwConfigurationParser" ref="aviatMwConfigurationParser" /> -->
+<!-- 		<property name="r3ProvisionnedCircuitParser" ref="r3ProvisionnedCircuitParser"/> -->
+<!-- 		<property name="r3MwConfigParser" ref="r3MwConfigParser"/> -->
+		<property name="wataniyaPlanning" value="false" />
+<!-- 		<property name="r3IpRoutingTableParser" ref="r3IpRoutingTableParser"/> -->
+<!-- 		<property name="flexibleDateParser" ref="flexibleDateParserRef"/> -->
+	</bean>
+	
+<!-- 	<bean name="vlanR3Parser" class="com.mobinets.nps.customer.transmission.manufacture.ericsson.r3.vlan.R3VlanParser"> -->
+<!-- 		<property name="r3Config" ref="manufacturesConfig"></property> -->
+<!-- 		<property name="r3NeIdFounder" ref="r3NeIdFounder"></property> -->
+<!-- 		<property name="nodeSlotsParser" ref="r3NodeSlotsParser"></property> -->
+<!-- 		<property name="flexibleDateParser" ref="flexibleDateParserRef"/> -->
+<!-- 	    <property name="r3InterConnsParser" ref="r3TrLinksParser"/> -->
+<!-- 	</bean> -->
+	                                                                       
+	<bean id="aviatNetworkElementsParser" class="com.mobinets.nps.customer.transmission.manufacture.aviat.node.AviatNetworkElementsParser">
+		<property name="r3Config" ref="manufacturesConfig" />
+		<property name="r3NeIdFounder" ref="r3NeIdFounder" />
+		<property name="nodesMatcher" ref="nodesMatching" />
+		<property name="siteMatchFounder" ref="siteMatchingFounder" />
+		<property name="siteNameFixer" ref="manufactureFixer" />
+<!-- 		<property name="mW_EmsNameIP_Matcher" ref="MW_EmsNameIP_Matcher"/> -->
+		<property name="ipMatcher" ref="ipMatcher" />
+	</bean>
+	
+	<bean id="r3NeIdFounder" class="com.mobinets.nps.customer.transmission.manufacture.ericsson.r3.common.R3NEIDFounder" init-method="init">
+		<property name="r3Config" ref="manufacturesConfig" />
+		<property name="siteNameFixer" ref="manufactureFixer" />
+		<property name="cdlSomeMatcher" ref="cdlSomeMatcher" />
+<!-- 		<property name="flexibleDateParser" ref="flexibleDateParserRef"/> -->
+		<property name="parallelismLevel" value="6"/>
+		<property name="enableParallelism" value="true"/>			
+	</bean>
+	
+	<bean id="aviatmwNodeSlotsParser" class="com.mobinets.nps.customer.transmission.manufacture.aviat.nodeSlot.AviatmwNodeSlotsParser" init-method="init">
+		<property name="boardTypeMatching" ref="boardTypeMatchParser" />
+		<property name="r3Config" ref="manufacturesConfig" />
+		<property name="r3NeIdFounder" ref="r3NeIdFounder" />
+		<property name="aviatNetworkElementsParser" ref="aviatNetworkElementsParser" />
+		<property name="aviatTransmissionLinkParser" ref="aviatTransmissionLinkParser" />
+		
+<!-- 		<property name="r3NodeInterfacesParser" ref="r3NodeInterfacesParser" /> -->
+	</bean>
+	
+		<bean id="aviatTransmissionLinkParser" class="com.mobinets.nps.customer.transmission.manufacture.aviat.trlinks.AviatTransmissionLinkParser">
+		<property name="r3Config" ref="manufacturesConfig" />
+		<property name="typeMatching" ref="typeMatchParser" />
+		<property name="aviatNetworkElementsParser" ref="aviatNetworkElementsParser" />
+<!-- 		<property name="aviatmwNodeSlotsParser" ref="aviatmwNodeSlotsParser" /> -->
+<!-- 		<property name="r3InterConnsGenerateExcel" ref="r3InterConnsGenerateExcel" /> -->
+		<property name="ipMatcher" ref="ipMatcher" />
+<!-- 	    <property name="r3FillAggregationIDParser" ref="r3FillAggregationIDParser"/> -->
+	</bean>
+	
+	 
+	
+ 
+	
+</beans>
